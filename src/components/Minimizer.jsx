@@ -1,14 +1,29 @@
 import React, { useContext, useState, useEffect } from 'react';
+import BaseInput from './BaseInput';
+export const DataContext = React.createContext();
 
 function Minimizer() {
 
     const MOORE = 'Moore';
     const MEALY = 'Mealy';
+
+    const [data, setData] = useState({ states: [], alphabet: [], initialState: '', finalStates:[]});
     const [currentAutomaton, setCurrentAutomaton] = useState(MOORE);
 
     const toggleMachineType = () => {
         setCurrentAutomaton(currentAutomaton === MOORE ? MEALY : MOORE);
     }
+
+    const handleChangeStates = (newStates) => {
+        console.log(newStates);
+        setData((prevState)=>({...prevState, states:newStates}));
+    }
+
+    const handleChangeAlphabet = (newAlphabet) => {
+        console.log(newAlphabet);
+        setData((prevState)=>({...prevState, alphabet:newAlphabet}));
+    }
+    
 
     return (
         <section className={styles.section}>
@@ -16,18 +31,27 @@ function Minimizer() {
                 <h1 className={styles.title}>{currentAutomaton} machine</h1>
                 <button className={styles.toggle} onClick={toggleMachineType}>To {currentAutomaton === MOORE ? MEALY : MOORE}</button>
             </header>
-            <article>
-                alksjasjfjafj
+            <article className={styles.article}>
+                <DataContext.Provider value={data}>
+                    <p className={styles.p}><span className={styles.span}>1.</span> Enter the states separated by commas:</p>
+                    <BaseInput label='* Only different alphanumeric values and commas are allowed' placeholder='e.g. A,B,C,D' onChangeData={handleChangeStates}/>
+                    <p className={styles.p + ' mt-8'}><span className={styles.span}>2.</span> Enter the alphabet symbols separated by commas:</p>
+                    <BaseInput label='* Only different alphanumeric values and commas are allowed' placeholder='e.g. 0,1' onChangeData={handleChangeAlphabet}/>
+                    <p>States = [{data.states.length}]<br/> Alphabet=[{data.alphabet}]</p>
+                </DataContext.Provider>
             </article>
         </section>
     )
 }
 
 const styles = {
-    header:' h-12 bg-gray-100 border-b-2 px-4 flex items-center justify-between text-slate-700',
-    section:' bg-white custom-shadow rounded-md w-full mt-8',
-    toggle:' rounded-md text-sm underline underline-offset-2 text-indigo-700 hover:text-indigo-900',
-    title:'font-bold'
+    header:' h-12 bg-gray-100 border-b-2 px-4 flex items-center justify-between text-slate-700 ',
+    section:' bg-white custom-shadow rounded-md w-10/12 mt-8 ',
+    toggle:' rounded-md text-sm underline underline-offset-4 text-indigo-700 hover:text-indigo-900 ',
+    title:' font-bold ',
+    article:' p-10 ',  
+    p: ' text-slate-600 ',    
+    span:' font-bold text-indigo-600 ',
 }
 
 export default Minimizer
