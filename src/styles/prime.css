@@ -68,3 +68,12 @@
   .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox{
     margin-top: 3px;
   }
+
+  .p-dropdown .p-dropdown-trigger{
+    width: 25px;
+  }
+
+  .p-dropdown .p-dropdown-trigger{
+    width: auto !important;
+    margin-right: 5px !important;
+  }

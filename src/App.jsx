@@ -24,14 +24,7 @@ function App() {
         <Minimizer />
       </main>
       <footer className={styles.footer}>
-        <p>UI design inspired by</p>
-        <a
-          className={styles.credits}
-          href="https://aswaddev.github.io/dfa-minimizer/"
-          target="_blank"
-        >
-          https://aswaddev.github.io/dfa-minimizer/
-        </a>
+        <p className='font-bold text-indigo-400'>Icesi University</p>
       </footer>
     </div>
   );
@@ -40,13 +33,14 @@ function App() {
 const styles = {
   app: " flex flex-col space-around h-screen ",
   main: " m-20 mt-28 flex flex-col items-center ",
-  header:" bg-indigo-600 flex px-8 items-center fixed top-0 h-16 w-full custom-shadow z-10 justify-between custom-shadow ",
+  header:
+    " bg-indigo-600 flex px-8 items-center fixed top-0 h-16 w-full custom-shadow z-10 justify-between custom-shadow ",
   headerTitle: " font-bold text-md text-slate-50 ",
   headerSubtitle: " text-slate-300 ",
   mainTitle: " text-4xl font-bold text-slate-700 text-center mb-4 ",
   text: " text-lg text-center text-slate-600 ",
   section: " bg-white custom-shadow rounded-md w-full mt-8 ",
-  footer:" flex font-mono text-slate-700 text-xs ml-auto mr-auto mt-auto mb-6 ",
+  footer: "font-mono text-slate-700 text-xs ml-auto mr-auto mt-auto mb-6 flex flex-col items-center",
   credits: " text-indigo-700 ml-2",
 };
 

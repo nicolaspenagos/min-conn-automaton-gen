@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   removeInvalidCommas,
   removeAnyTrailingComma,
@@ -26,6 +26,11 @@ function BaseInput({ label, placeholder, onChangeData }) {
     if (!isDuplicate(states, result)) setStates(result);
   };
 
+  const renderLable = () => {
+    if(label!=='')
+    return <label className={styles.lable}>{label}</label>
+  }
+
   return (
     <div className={styles.div}>
       <input
@@ -35,13 +40,13 @@ function BaseInput({ label, placeholder, onChangeData }) {
         onBlur={handleFocusOut}
         placeholder={placeholder}
       ></input>
-      <label className={styles.lable}>{label}</label>
+      {renderLable()}
     </div>
   );
 }
 const styles = {
   input: " border-b-2 outline-none w-full focus:border-indigo-300",
-  lable: " text-indigo-700 text-xs font-mono ",
+  lable: " text-indigo-700 text-[10px] font-mono ",
 };
 
 export default BaseInput;
