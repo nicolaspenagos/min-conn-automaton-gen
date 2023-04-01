@@ -2,10 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import BaseInput from "./BaseInput";
 import { Dropdown } from "primereact/dropdown";
 import { RadioButton } from "primereact/radiobutton";
-import MachineTable from "./MachineTable";
+import MachineTable from "./MachineTable/MachineTable";
+import { getMinMooreMachine } from "../logic/moore/mooreLogic.js";
 import {
   getStatesOptions,
   generateEmptyMatrix,
+  isFullFilled,
 } from "../utils/machineUtils.js";
 
 export const DataContext = React.createContext();
@@ -17,16 +19,19 @@ function Minimizer() {
     states: [],
     inputAlphabet: [],
     initialState: "",
-    outputAlphabet: [],
+    outputAlphabet: ["0", "1"],
     type: MOORE,
     machineMatrix: null,
   });
+
+  const [disabled, setDisabled] = useState(true);
 
   const handleChangeStates = (newStates) => {
     setData((prevState) => ({ ...prevState, states: newStates }));
   };
 
   const handleSetType = (newType) => {
+    resetMatrix();
     setData((prevState) => ({ ...prevState, type: newType }));
   };
 
@@ -34,16 +39,8 @@ function Minimizer() {
     setData((prevState) => ({ ...prevState, inputAlphabet: newAlphabet }));
   };
 
-  const handleChangeOutputAlphabet = (newAlphabet) => {
-    setData((prevState) => ({ ...prevState, outputAlphabet: newAlphabet }));
-  };
-
   const handleChangeInitialState = (newInitialState) => {
     setData((prevState) => ({ ...prevState, initialState: newInitialState }));
-  };
-
-  const handleChangeFinalStates = (newFinalStates) => {
-    setData((prevState) => ({ ...prevState, finalStates: newFinalStates }));
   };
 
   const handleChangeMachineMatrix = (i, j, element) => {
@@ -52,15 +49,19 @@ function Minimizer() {
       newMatrix = generateEmptyMatrix(
         data.states.length,
         data.inputAlphabet.length,
-        (data.type===MOORE)?1:0
+        data.type === MOORE ? 1 : 0
       );
-    }else{
+    } else {
       newMatrix = [...data.machineMatrix];
     }
 
-    console.log(newMatrix);
     newMatrix[i][j] = element;
     setData((prevState) => ({ ...prevState, machineMatrix: newMatrix }));
+    setDisabled(!isFullFilled(data.machineMatrix));
+  };
+
+  const resetMatrix = () => {
+    setData((prevState) => ({ ...prevState, machineMatrix: null }));
   };
 
   return (
@@ -114,15 +115,7 @@ function Minimizer() {
             placeholder="e.g. 0,1"
             onChangeData={handleChangeInputAlphabet}
           />
-          <p className={styles.p + " mt-8"}>
-            <span className={styles.span}>3.</span> Enter the{" "}
-            <strong>output alphabet</strong> symbols separated by commas:
-          </p>
-          <BaseInput
-            label="* Only different alphanumeric values and commas are allowed"
-            placeholder="e.g. 0,1"
-            onChangeData={handleChangeOutputAlphabet}
-          />
+
           <div className={data.states.length === 0 ? "hidden" : "relative"}>
             <p className={styles.p + " mt-8"}>
               <span className={styles.span}>4.</span> Select the{" "}
@@ -139,7 +132,7 @@ function Minimizer() {
             className={
               data.states.length === 0 ||
               data.inputAlphabet.length === 0 ||
-              data.outputAlphabet.length === 0
+              data.initialState === ""
                 ? "hidden"
                 : "relative"
             }
@@ -153,6 +146,20 @@ function Minimizer() {
                 handleChangeMachineMatrix={handleChangeMachineMatrix}
               />
             </div>
+            <button
+              className={disabled?styles.button+' opacity-30':styles.button}
+              disabled={disabled}
+              onClick={() => {
+                getMinMooreMachine(
+                  data.states,
+                  data.initialState,
+                  data.inputAlphabet,
+                  data.machineMatrix
+                );
+              }}
+            >
+              Minimize
+            </button>
           </div>
         </DataContext.Provider>
       </article>
@@ -163,11 +170,13 @@ function Minimizer() {
 const styles = {
   header:
     " h-12 bg-gray-100 border-b-2 px-4 flex items-center justify-between text-slate-700 rounded-t-md",
-  section: " bg-white custom-shadow rounded-md w-3/4 mt-8 ",
+  section: " bg-white custom-shadow rounded-md w-3/4 mt-8 mb-16",
   title: " font-bold text-2xl ",
   article: " p-10",
   p: " text-slate-600 ",
   span: " font-bold text-indigo-600 ",
+  button:
+    " bg-indigo-600 rounded-md text-white px-4 py-1 font-bold custom-shadow mt-6 ml-2 h:bg-indigo-700",
 };
 
 export default Minimizer;

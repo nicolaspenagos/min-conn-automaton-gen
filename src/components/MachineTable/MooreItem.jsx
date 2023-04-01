@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { DataContext } from "./Minimizer.jsx";
+import { DataContext } from "../Minimizer.jsx";
 import { Dropdown } from "primereact/dropdown";
-import {getStatesOptions} from "../utils/machineUtils.js";
+import {getStatesOptions} from "../../utils/machineUtils.js";
 
 
 function MooreItem({handleChangeMachineMatrix, i, j, isOutputItem}) {
