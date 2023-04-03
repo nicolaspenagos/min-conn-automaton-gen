@@ -1,3 +1,7 @@
+/**
+  @module machineUtils
+*/
+
 export function getStatesOptions(states) {
   const options = states.map((state) => {
     return { label: state, value: state };

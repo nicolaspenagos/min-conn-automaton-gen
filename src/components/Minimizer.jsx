@@ -8,7 +8,7 @@ import {
   getStatesOptions,
   generateEmptyMatrix,
   isFullFilled,
-} from "../utils/machineUtils.js";
+} from "../logic/utils/machineUtils.js";
 
 export const DataContext = React.createContext();
 export const MOORE = "Moore";

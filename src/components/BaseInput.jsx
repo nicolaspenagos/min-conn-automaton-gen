@@ -3,7 +3,7 @@ import {
   removeInvalidCommas,
   removeAnyTrailingComma,
   isDuplicate,
-} from "../utils/stringValidation";
+} from "../logic/utils/stringValidation";
 
 function BaseInput({ label, placeholder, onChangeData }) {
   const [states, setStates] = useState("");
