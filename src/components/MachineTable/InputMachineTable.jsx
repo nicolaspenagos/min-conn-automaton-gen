@@ -3,8 +3,9 @@ import { DataContext, MOORE, MEALY } from "../Minimizer.jsx";
 import MealyItem from "./MealyItem.jsx";
 import MooreItem from "./MooreItem.jsx";
 
-function MachineTable({handleChangeMachineMatrix}) {
+function InputMachineTable({handleChangeMachineMatrix, input}) {
   const data = useContext(DataContext);
+  
 
   const renderTableHeader = () => {
     return (
@@ -63,4 +64,4 @@ const styles = {
   table: "mt-6 text-slate-800",
 };
 
-export default MachineTable;
+export default InputMachineTable;

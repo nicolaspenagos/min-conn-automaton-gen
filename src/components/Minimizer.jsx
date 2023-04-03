@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import BaseInput from "./BaseInput";
 import { Dropdown } from "primereact/dropdown";
 import { RadioButton } from "primereact/radiobutton";
-import MachineTable from "./MachineTable/MachineTable";
+import InputMachineTable from "./MachineTable/InputMachineTable";
+import Solution from "./Solution";
 import { getMinMooreMachine } from "../logic/moore/mooreLogic.js";
 import {
   getStatesOptions,
@@ -25,6 +26,8 @@ function Minimizer() {
   });
 
   const [disabled, setDisabled] = useState(true);
+
+  const [solution, setSolution] = useState(null);
 
   const handleChangeStates = (newStates) => {
     setData((prevState) => ({ ...prevState, states: newStates }));
@@ -64,6 +67,19 @@ function Minimizer() {
     setData((prevState) => ({ ...prevState, machineMatrix: null }));
   };
 
+  const renderSolution = () => {
+    if (solution){
+      return (
+        <>
+          <p className={styles.p + ' mt-6'}>
+            <span className={styles.span}>6. </span>Minimal connected equivalent automaton:
+          </p>
+          <Solution solution={solution} />
+        </>
+      );
+    }
+  };
+
   return (
     <section className={styles.section}>
       <header className={styles.header}>
@@ -96,6 +112,13 @@ function Minimizer() {
         </div>
       </header>
       <article className={styles.article}>
+        <div className="">
+          <div>
+            <p>A <strong>Moore machine</strong> is a type of finite state machine consisting of a set of states, a set of inputs, a set of outputs, and a transition function that describes the behavior of the machine.In a Moore machine, the outputs are associated with the states themselves, rather than with the transitions between states.</p>
+          </div>
+          <img src="./moore.jpg" alt="Moore machin table and state diagram" className="w-[450px]" draggable='false'/>
+      
+        </div>
         <DataContext.Provider value={data}>
           <p className={styles.p}>
             <span className={styles.span}>1.</span> Enter the{" "}
@@ -142,24 +165,30 @@ function Minimizer() {
               <strong>transitions</strong>:
             </p>
             <div className="overflow-x-auto">
-              <MachineTable
+              <InputMachineTable
                 handleChangeMachineMatrix={handleChangeMachineMatrix}
               />
             </div>
             <button
-              className={disabled?styles.button+' opacity-30':styles.button}
+              className={
+                disabled ? styles.button + " opacity-30" : styles.button
+              }
               disabled={disabled}
               onClick={() => {
-                getMinMooreMachine(
-                  data.states,
-                  data.initialState,
-                  data.inputAlphabet,
-                  data.machineMatrix
+                setSolution(
+                  getMinMooreMachine(
+                    data.states,
+                    data.initialState,
+                    data.inputAlphabet,
+                    data.machineMatrix
+                  )
                 );
               }}
             >
               Minimize
             </button>
+
+            {renderSolution()}
           </div>
         </DataContext.Provider>
       </article>

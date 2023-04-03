@@ -32,4 +32,25 @@ export function isFullFilled(matrix) {
   return true;
 }
 
+export function fromSetToString(array){
+
+  if(array.length===0) return '';
+
+  let str = '';
+  for(let i=0; i<array.length; i++){
+    let counter = 0;
+    str+='{';
+    array[i].forEach(e=>{
+      str+=e;
+      if(counter+1<array[i].size)
+        str+=','
+      counter++;
+    });
+    str+='}';
+    if(i+1<array.length){
+      str+=',';
+    }
+  }
+  return str;
+}
 

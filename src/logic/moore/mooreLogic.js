@@ -2,6 +2,8 @@
   @module mooreLogic
 */
 
+import { MOORE } from "../../components/Minimizer";
+
 /**
  * Builds a minimized Moore Machine given its components.
  * @param {string[]} states - An array with the names of the states of the machine.
@@ -26,13 +28,11 @@ export function getMinMooreMachine(
   const [newMooreMachine, minimizedPartitions] =
     minimizeMooreMachine(mooreMachine);
 
-  const response = {
+  return {
     newMooreMachine,
     minimizedPartitions,
     removedStates,
   };
-
-  console.log(response);
 }
 
 /**
@@ -63,6 +63,7 @@ function buildMooreMachine(states, initialState, inputAlphabet, matrix) {
     initialState,
     states: statesMap,
     inputAlphabet,
+    type:MOORE
   };
 }
 
@@ -237,6 +238,7 @@ function buildNewMooreMachine(prevMooreMachine, minimizedPartitions) {
     initialState: newStateEquivalences.get(prevMooreMachine.initialState),
     inputAlphabet: prevMooreMachine.inputAlphabet,
     states: newStateMap,
+    type:MOORE
   };
 
   return newMooreMachine;
