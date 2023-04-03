@@ -27,3 +27,5 @@ export function isFullFilled(matrix) {
   }
   return true;
 }
+
+

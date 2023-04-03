@@ -4,7 +4,23 @@ export function getMinMooreMachine(
   inputAlphabet,
   matrix
 ) {
-  buildMooreMachine(states, initialState, inputAlphabet, matrix);
+  const mooreMachine = buildMooreMachine(
+    states,
+    initialState,
+    inputAlphabet,
+    matrix
+  );
+  const removedStates = removeInaccessibleStates(mooreMachine);
+  const [newMooreMachine, minimizedPartitions] =
+    minimizeMooreMachine(mooreMachine);
+
+  const response = {
+    newMooreMachine,
+    minimizedPartitions,
+    removedStates,
+  };
+
+  console.log(response);
 }
 
 function buildMooreMachine(states, initialState, inputAlphabet, matrix) {
@@ -23,17 +39,20 @@ function buildMooreMachine(states, initialState, inputAlphabet, matrix) {
     statesMap.set(states[i], { stateStransitions, output });
   }
 
-  const mooreMachine = {
+  return {
     initialState,
     states: statesMap,
+    inputAlphabet,
   };
-
-  minimizeMooreMachine(mooreMachine);
 }
 
 function minimizeMooreMachine(mooreMachine) {
   const minimizedPartitions = getMinimizedPartitions(mooreMachine.states);
-  console.log(minimizedPartitions);
+  const newMooreMachine = buildNewMooreMachine(
+    mooreMachine,
+    minimizedPartitions
+  );
+  return [newMooreMachine, minimizedPartitions];
 }
 
 function getMinimizedPartitions(states) {
@@ -43,6 +62,7 @@ function getMinimizedPartitions(states) {
 
   do {
     prevPartitionArray = [...currentPartitionArray];
+
     partitionsResponse.push(prevPartitionArray);
     currentPartitionArray = [];
 
@@ -135,4 +155,97 @@ function arePartitionsEqual(a, b) {
     }
   }
   return true;
+}
+
+function buildNewMooreMachine(prevMooreMachine, minimizedPartitions) {
+  const newStateEquivalences = getNewStateEquivalences(
+    minimizedPartitions[minimizedPartitions.length - 1]
+  );
+  const newStateMap = getNewStatesMap(
+    prevMooreMachine.states,
+    newStateEquivalences
+  );
+
+  const newMooreMachine = {
+    initialState: newStateEquivalences.get(prevMooreMachine.initialState),
+    inputAlphabet: prevMooreMachine.inputAlphabet,
+    states: newStateMap,
+  };
+
+  return newMooreMachine;
+}
+
+function getNewStateEquivalences(lastPartition) {
+  let newStatesMap = new Map();
+  let key;
+
+  for (let i = 0; i < lastPartition.length; i++) {
+    let newStateKeysArray = [];
+    for (key of lastPartition[i]) {
+      newStateKeysArray.push(key);
+    }
+    let newStateKey = "{" + newStateKeysArray.join(",") + "}";
+
+    newStateKeysArray.forEach((key) => {
+      newStatesMap.set(key, newStateKey);
+    });
+  }
+  return newStatesMap;
+}
+
+function getNewStatesMap(prevStates, newStateEquivalences) {
+  let newStates = new Map();
+
+  for (const [prevKey, prevVal] of prevStates) {
+    const newKey = newStateEquivalences.get(prevKey);
+    if (!newStates.has(newKey)) {
+      let newStatesTransitions = [];
+      prevVal.stateStransitions.forEach((prevStateTrans) => {
+        newStatesTransitions.push(newStateEquivalences.get(prevStateTrans));
+      });
+      newStates.set(newKey, {
+        output: prevVal.output,
+        stateStransitions: newStatesTransitions,
+      });
+    }
+  }
+
+  return newStates;
+}
+
+function removeInaccessibleStates(mooreMachine) {
+  const accessedStates = accessState(
+    mooreMachine.initialState,
+    new Set(),
+    mooreMachine
+  );
+
+  if (accessedStates.size === mooreMachine.states.size) {
+    return "No state was removed";
+  }
+
+  let inaccessibleStates = "[ ";
+
+  let counter = 0;
+  for (const [key, val] of mooreMachine.states) {
+    counter++;
+    if (!accessedStates.has(key)) {
+      inaccessibleStates += key;
+      mooreMachine.states.delete(key);
+      if (counter + 1 < mooreMachine.states.size) inaccessibleStates += ",";
+    }
+  }
+  inaccessibleStates += " ]";
+  return inaccessibleStates;
+}
+
+function accessState(state, accessedStates, mooreMachine) {
+  accessedStates.add(state);
+  const currentTransition = mooreMachine.states.get(state).stateStransitions;
+  for (let i = 0; i < currentTransition.length; i++) {
+    if (!accessedStates.has(currentTransition[i]))
+      accessState(currentTransition[i], accessedStates, mooreMachine);
+  }
+
+  return accessedStates;
 }
