@@ -28,7 +28,7 @@ function OutputMachineTable({machine}) {
   };
 
   const getTableBody = () => {
-    console.log(machine);
+    
     let table = [];
   
     let counter = 0;
@@ -38,7 +38,7 @@ function OutputMachineTable({machine}) {
             <tr key={"row-" + counter}>
               <td className="text-right pr-2 border-0">{(stateKey===machine.initialState)?'> '+stateKey:stateKey}</td>
               {val.stateStransitions.map((element, j) => (
-                <td className=' min-w-[80px]'>
+                <td key={'row-'+counter++} className=' min-w-[80px]'>
                     {element}
                 </td>
               ))}

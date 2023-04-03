@@ -308,7 +308,7 @@ function removeInaccessibleStates(mooreMachine) {
   );
 
   if (accessedStates.size === mooreMachine.states.size) {
-    return "No state was removed";
+    return "All states are accessible";
   }
 
   let inaccessibleStates = "[ ";
