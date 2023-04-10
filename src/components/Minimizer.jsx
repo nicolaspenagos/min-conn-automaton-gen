@@ -171,7 +171,7 @@ function Minimizer() {
 
           <div className={data.states.length === 0 ? "hidden" : "relative"}>
             <p className={styles.p + " mt-8"}>
-              <span className={styles.span}>4.</span> Select the{" "}
+              <span className={styles.span}>3.</span> Select the{" "}
               <strong>initial state</strong>:
             </p>
             <Dropdown
@@ -191,7 +191,7 @@ function Minimizer() {
             }
           >
             <p className={styles.p + " mt-8"}>
-              <span className={styles.span}>5.</span> Enter the{" "}
+              <span className={styles.span}>4.</span> Enter the{" "}
               <strong>transitions</strong>:
             </p>
             <div className="overflow-x-auto">
