@@ -23,7 +23,6 @@ function App() {
         </p>
         <Minimizer />
       </main>
-    
     </div>
   );
 }

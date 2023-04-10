@@ -10,18 +10,16 @@
  * @returns {string} - The processed string.
  */
 export function removeInvalidCommas(str) {
-
-    for (let i = 0; i < str.length; i++) {
-        if (str.charAt(i) === ',') {
-            if (i === 0 || str.charAt(i - 1) === ',') {
-                str = str.substring(0, i) + '' + str.substring(i + 1);
-            }
-        }
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) === ",") {
+      if (i === 0 || str.charAt(i - 1) === ",") {
+        str = str.substring(0, i) + "" + str.substring(i + 1);
+      }
     }
+  }
 
-    return str;
+  return str;
 }
-
 
 /**
  * Removes any trailing comma from the input string.
@@ -30,9 +28,9 @@ export function removeInvalidCommas(str) {
  * @returns {string} - The processed string.
  */
 export function removeAnyTrailingComma(str) {
-    if (str.charAt(str.length - 1) === ',')
-        return str.substring(0, str.length - 1);
-    return str;
+  if (str.charAt(str.length - 1) === ",")
+    return str.substring(0, str.length - 1);
+  return str;
 }
 
 /**
@@ -46,13 +44,9 @@ export function removeAnyTrailingComma(str) {
  * contains a duplicate of the last element of the original string.
  */
 export function isDuplicate(originalStr, newStr) {
+  if (newStr.length < originalStr.length) return false;
 
-    if (newStr.length < originalStr.length)
-        return false;
-
-    const newStrParts = newStr.split(',');
-    let lastElement = newStrParts[newStrParts.length - 1];
-    return originalStr.split(',').includes(lastElement);
-
+  const newStrParts = newStr.split(",");
+  let lastElement = newStrParts[newStrParts.length - 1];
+  return originalStr.split(",").includes(lastElement);
 }
-

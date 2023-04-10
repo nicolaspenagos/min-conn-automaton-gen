@@ -2,11 +2,11 @@
   @module mooreLogic
 */
 
-import {  MOORE } from "../../components/Minimizer";
+import { MOORE } from "../../components/Minimizer";
 import {
   getMinimizedPartitions,
   getNewStateEquivalences,
-  removeInaccessibleStates
+  removeInaccessibleStates,
 } from "../logicUtils";
 
 /**
@@ -34,7 +34,7 @@ export function getMinMooreMachine(
     minimizeMooreMachine(mooreMachine);
 
   return {
-    machine:newMooreMachine,
+    machine: newMooreMachine,
     minimizedPartitions,
     removedStates,
   };
@@ -162,4 +162,3 @@ function getNewStatesMap(prevStates, newStateEquivalences) {
 
   return newStates;
 }
-

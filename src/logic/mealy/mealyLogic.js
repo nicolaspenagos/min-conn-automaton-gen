@@ -3,8 +3,21 @@
 */
 
 import { MEALY } from "../../components/Minimizer";
-import { getMinimizedPartitions, getNewStateEquivalences, removeInaccessibleStates } from "../logicUtils";
+import {
+  getMinimizedPartitions,
+  getNewStateEquivalences,
+  removeInaccessibleStates,
+} from "../logicUtils";
 
+/**
+ * Builds a Mealy machine object from its component parts.
+ *
+ * @param {Array} states - An array of states.
+ * @param {String} initialState - The initial state.
+ * @param {Array} inputAlphabet - An array of input alphabet symbols.
+ * @param {Array} matrix - The transition function matrix.
+ * @returns {Object} The Mealy machine object.
+ */
 export function getMealyMachine(states, initialState, inputAlphabet, matrix) {
   const mealyMachine = buildMealyMachine(
     states,
@@ -15,15 +28,24 @@ export function getMealyMachine(states, initialState, inputAlphabet, matrix) {
 
   const removedStates = removeInaccessibleStates(mealyMachine);
   const [newMealyMachine, minimizedPartitions] =
-  minimizeMealyMachine(mealyMachine);
+    minimizeMealyMachine(mealyMachine);
 
   return {
-    machine:newMealyMachine,
+    machine: newMealyMachine,
     minimizedPartitions,
     removedStates,
   };
 }
 
+/**
+ * Builds the Mealy machine object.
+ *
+ * @param {Array} states - An array of states.
+ * @param {String} initialState - The initial state.
+ * @param {Array} inputAlphabet - An array of input alphabet symbols.
+ * @param {Array} matrix - The transition function matrix.
+ * @returns {Object} The Mealy machine object.
+ */
 function buildMealyMachine(states, initialState, inputAlphabet, matrix) {
   let statesMap = new Map();
 
@@ -43,13 +65,18 @@ function buildMealyMachine(states, initialState, inputAlphabet, matrix) {
   };
 }
 
+/**
+ * Minimizes a given Mealy machine.
+ *
+ * @param {Object} mealyMachine - The Mealy machine object.
+ * @returns {Array} An array containing the new Mealy machine and the minimized partitions.
+ */
 function minimizeMealyMachine(mealyMachine) {
   const minimizedPartitions = getMinimizedPartitions(
     mealyMachine.states,
     getFirstDistinguishablePartition(mealyMachine.states)
   );
 
-  
   const newMealyMachine = buildNewMealyMachine(
     mealyMachine,
     minimizedPartitions
@@ -57,6 +84,12 @@ function minimizeMealyMachine(mealyMachine) {
   return [newMealyMachine, minimizedPartitions];
 }
 
+/**
+ * Gets the first distinguishable partition.
+ *
+ * @param {Map} states - The map of states.
+ * @returns {Array} An array containing the partition.
+ */
 function getFirstDistinguishablePartition(states) {
   let firstPartitionMap = new Map();
 
@@ -79,6 +112,12 @@ function getFirstDistinguishablePartition(states) {
   return Array.from(firstPartitionMap.values());
 }
 
+/**
+ *Builds a new Mealy machine based on the given minimized partitions.
+ *@param {Object} prevMealyMachine - The previous Mealy machine.
+ *@param {Array} minimizedPartitions - The minimized partitions.
+ *@returns {Object} A new Mealy machine.
+ */
 function buildNewMealyMachine(prevMealyMachine, minimizedPartitions) {
   const newStateEquivalences = getNewStateEquivalences(
     minimizedPartitions[minimizedPartitions.length - 1]
@@ -93,15 +132,11 @@ function buildNewMealyMachine(prevMealyMachine, minimizedPartitions) {
     initialState: newStateEquivalences.get(prevMealyMachine.initialState),
     inputAlphabet: prevMealyMachine.inputAlphabet,
     states: newStateMap,
-    type:MEALY
+    type: MEALY,
   };
 
-  console.log(newMealyMachine);
   return newMealyMachine;
-
- 
 }
-
 
 /**
  * Gets the new states map.
@@ -111,26 +146,23 @@ function buildNewMealyMachine(prevMealyMachine, minimizedPartitions) {
  * @returns {Map} The new states map.
  */
 function getNewStatesMap(prevStates, newStateEquivalences) {
-    let newStates = new Map();
-  
-    for (const [prevKey, prevVal] of prevStates) {
-      const newKey = newStateEquivalences.get(prevKey);
-      if (!newStates.has(newKey)) {
-        let newStatesTransitions = [];
-        prevVal.stateStransitions.forEach((prevStateTrans) => {
-           
-          newStatesTransitions.push({
-            nextState:newStateEquivalences.get(prevStateTrans.nextState),
-            output:prevStateTrans.output
-          });
-        });
-        newStates.set(newKey, {
-          stateStransitions: newStatesTransitions,
-        });
-      }
-    }
-  
-    return newStates;
-  }
-  
+  let newStates = new Map();
 
+  for (const [prevKey, prevVal] of prevStates) {
+    const newKey = newStateEquivalences.get(prevKey);
+    if (!newStates.has(newKey)) {
+      let newStatesTransitions = [];
+      prevVal.stateStransitions.forEach((prevStateTrans) => {
+        newStatesTransitions.push({
+          nextState: newStateEquivalences.get(prevStateTrans.nextState),
+          output: prevStateTrans.output,
+        });
+      });
+      newStates.set(newKey, {
+        stateStransitions: newStatesTransitions,
+      });
+    }
+  }
+
+  return newStates;
+}

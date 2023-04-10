@@ -18,7 +18,9 @@ function MooreSolution({ solution }) {
           <p className={styles.text}>{solution.removedStates}</p>
         </div>
         <div className=" border-b-2 pb-2 border-solid border-slate-200">
-        <p className={styles.textTitle}>Minimization partitions:</p>
+          <p className={styles.textTitle}>
+            Minimization equivalent partitions:
+          </p>
           {renderParitions(solution.minimizedPartitions).map((element, i) => (
             <p className={styles.text} key={"pindx" + i}>
               {element}

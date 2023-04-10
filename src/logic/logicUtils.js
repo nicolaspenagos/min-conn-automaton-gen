@@ -144,30 +144,25 @@ export function getNewStateEquivalences(lastPartition) {
   return newStatesMap;
 }
 
-
 /**
  * Recursively finds all states that can be reached from the current state
  * @param {string} state - The current state to find reachable states from
  * @param {Set} accessedStates - A set of all states that have already been accessed
- * @param {Object} mooreMachine - The Moore Machine being searched
+ * @param {Object} machine - The Machine being searched
  * @returns {Set} - A set of all states that can be reached from the current state
  */
-export function accessState(state, accessedStates, mooreMachine) {
+export function accessState(state, accessedStates, machine) {
   accessedStates.add(state);
-  const currentTransition = mooreMachine.states.get(state).stateStransitions;
+  const currentTransition = machine.states.get(state).stateStransitions;
   for (let i = 0; i < currentTransition.length; i++) {
-    if (mooreMachine.type === MOORE) {
+    if (machine.type === MOORE) {
       if (!accessedStates.has(currentTransition[i]))
-        accessState(currentTransition[i], accessedStates, mooreMachine);
+        accessState(currentTransition[i], accessedStates, machine);
     }
 
-    if (mooreMachine.type === MEALY) {
+    if (machine.type === MEALY) {
       if (!accessedStates.has(currentTransition[i].nextState))
-        accessState(
-          currentTransition[i].nextState,
-          accessedStates,
-          mooreMachine
-        );
+        accessState(currentTransition[i].nextState, accessedStates, machine);
     }
   }
 
@@ -175,36 +170,29 @@ export function accessState(state, accessedStates, mooreMachine) {
 }
 
 /**
- * Removes any states in the Machine that are not reachable from the initial state
- * @param {Object} mooreMachine - The Machine to remove states from
+ * Removes any states in the machine that are not reachable from the initial state
+ * @param {Object} machine - The Machine to remove states from
  * @returns {string} - A string containing the inaccessible states that were removed, or "No state was removed" if no states were removed
  */
-export function removeInaccessibleStates(mooreMachine) {
-  const accessedStates = accessState(
-    mooreMachine.initialState,
-    new Set(),
-    mooreMachine
-  );
+export function removeInaccessibleStates(machine) {
+  const accessedStates = accessState(machine.initialState, new Set(), machine);
 
-  if (accessedStates.size === mooreMachine.states.size) {
+  if (accessedStates.size === machine.states.size) {
     return "All states are accessible";
   }
 
   let inaccessibleStates = "[ ";
 
   let counter = 0;
-  for (const [key, val] of mooreMachine.states) {
-
+  for (const [key, val] of machine.states) {
     if (!accessedStates.has(key)) {
       inaccessibleStates += key;
 
-      if (counter + 1 < mooreMachine.states.size) inaccessibleStates += ",";
-      mooreMachine.states.delete(key);
-
+      if (counter + 1 < machine.states.size) inaccessibleStates += ",";
+      machine.states.delete(key);
     }
     counter++;
   }
   inaccessibleStates += " ]";
   return inaccessibleStates;
 }
-

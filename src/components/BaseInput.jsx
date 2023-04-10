@@ -27,9 +27,8 @@ function BaseInput({ label, placeholder, onChangeData }) {
   };
 
   const renderLable = () => {
-    if(label!=='')
-    return <label className={styles.lable}>{label}</label>
-  }
+    if (label !== "") return <label className={styles.lable}>{label}</label>;
+  };
 
   return (
     <div className={styles.div}>

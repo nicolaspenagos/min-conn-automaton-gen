@@ -43,7 +43,9 @@ function OutputMachineTable({ machine }) {
           </td>
           {val.stateStransitions.map((element, j) => (
             <td key={"row-" + counter++} className=" min-w-[80px] text-center ">
-              {machine.type===MOORE?element:element.nextState+'|'+element.output }
+              {machine.type === MOORE
+                ? element
+                : element.nextState + "|" + element.output}
             </td>
           ))}
           <td className={machine.type === MEALY ? "hidden" : ""}>
