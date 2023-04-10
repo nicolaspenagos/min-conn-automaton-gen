@@ -98,7 +98,7 @@ function Minimizer() {
       return (
         <>
           <p className={styles.p + " mt-6"}>
-            <span className={styles.span}>6. </span>Minimal connected equivalent
+            <span className={styles.span}>5. </span>Minimal connected equivalent
             automaton:
           </p>
 
