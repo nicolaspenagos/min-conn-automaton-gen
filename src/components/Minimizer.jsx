@@ -30,12 +30,37 @@ function Minimizer() {
 
   const [solution, setSolution] = useState(null);
 
+  const getMachineDefintion = () => {
+    if (data.type === MOORE) {
+      return (
+        <p>
+          A <strong>Moore machine</strong> is a type of finite state machine
+          consisting of a set of states, a set of inputs, a set of outputs, and
+          a transition function that describes the behavior of the machine.In a
+          Moore machine, the outputs are associated with the states themselves,
+          rather than with the transitions between states.
+        </p>
+      );
+    }
+    if (data.type === MEALY) {
+      return (
+        <p>
+          A <strong>Mealy machine</strong> is a type of finite state machine
+          consisting of a set of states, a set of inputs, a set of outputs, and
+          a transition function that describes the behavior of the machine. In a
+          Mealy machine, the outputs are associated with the transitions between
+          states, rather than with the states themselves.
+        </p>
+      );
+    }
+  };
   const handleChangeStates = (newStates) => {
     setData((prevState) => ({ ...prevState, states: newStates }));
   };
 
   const handleSetType = (newType) => {
     resetMatrix();
+    setDisabled(true)
     setData((prevState) => ({ ...prevState, type: newType }));
   };
 
@@ -116,18 +141,9 @@ function Minimizer() {
       </header>
       <article className={styles.article}>
         <div className="">
-          <div>
-            <p>
-              A <strong>Moore machine</strong> is a type of finite state machine
-              consisting of a set of states, a set of inputs, a set of outputs,
-              and a transition function that describes the behavior of the
-              machine.In a Moore machine, the outputs are associated with the
-              states themselves, rather than with the transitions between
-              states.
-            </p>
-          </div>
+          <div>{getMachineDefintion()}</div>
           <img
-            src="./moore.jpg"
+            src={data.type===MOORE?"./moore.jpg":"./mealy.jpg"}
             alt="Moore machin table and state diagram"
             className="w-[450px]"
             draggable="false"

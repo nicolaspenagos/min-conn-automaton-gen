@@ -1,4 +1,7 @@
 import { MEALY, MOORE } from "../components/Minimizer";
+/**
+  @module logicUtils
+*/
 
 /**
  * Checks whether two sets are equal.
