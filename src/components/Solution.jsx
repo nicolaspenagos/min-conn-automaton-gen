@@ -2,7 +2,7 @@ import React from "react";
 import { fromSetToString } from "../logic/utils/machineUtils";
 import OutputMachineTable from "./MachineTable/OutputMachineTable";
 
-function Solution({ solution }) {
+function MooreSolution({ solution }) {
   const renderParitions = (partitions) => {
     let partitionsStrArr = [];
     for (let i = 0; i < partitions.length; i++) {
@@ -28,7 +28,7 @@ function Solution({ solution }) {
       </article>
       <article>
         <p className={styles.textTitle}>Minimal connected equivalent:</p>
-        <OutputMachineTable machine={solution.newMooreMachine} />
+        <OutputMachineTable machine={solution.machine} />
       </article>
     </section>
   );
@@ -38,4 +38,4 @@ const styles = {
   text: "text-slate-700",
 };
 
-export default Solution;
+export default MooreSolution;

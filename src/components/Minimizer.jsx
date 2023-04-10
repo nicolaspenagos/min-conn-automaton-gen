@@ -1,10 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState } from "react";
 import BaseInput from "./BaseInput";
 import { Dropdown } from "primereact/dropdown";
 import { RadioButton } from "primereact/radiobutton";
 import InputMachineTable from "./MachineTable/InputMachineTable";
 import Solution from "./Solution";
 import { getMinMooreMachine } from "../logic/moore/mooreLogic.js";
+import { getMealyMachine } from "../logic/mealy/mealyLogic.js";
 import {
   getStatesOptions,
   generateEmptyMatrix,
@@ -68,12 +69,14 @@ function Minimizer() {
   };
 
   const renderSolution = () => {
-    if (solution){
+    if (solution) {
       return (
         <>
-          <p className={styles.p + ' mt-6'}>
-            <span className={styles.span}>6. </span>Minimal connected equivalent automaton:
+          <p className={styles.p + " mt-6"}>
+            <span className={styles.span}>6. </span>Minimal connected equivalent
+            automaton:
           </p>
+
           <Solution solution={solution} />
         </>
       );
@@ -114,10 +117,21 @@ function Minimizer() {
       <article className={styles.article}>
         <div className="">
           <div>
-            <p>A <strong>Moore machine</strong> is a type of finite state machine consisting of a set of states, a set of inputs, a set of outputs, and a transition function that describes the behavior of the machine.In a Moore machine, the outputs are associated with the states themselves, rather than with the transitions between states.</p>
+            <p>
+              A <strong>Moore machine</strong> is a type of finite state machine
+              consisting of a set of states, a set of inputs, a set of outputs,
+              and a transition function that describes the behavior of the
+              machine.In a Moore machine, the outputs are associated with the
+              states themselves, rather than with the transitions between
+              states.
+            </p>
           </div>
-          <img src="./moore.jpg" alt="Moore machin table and state diagram" className="w-[450px]" draggable='false'/>
-      
+          <img
+            src="./moore.jpg"
+            alt="Moore machin table and state diagram"
+            className="w-[450px]"
+            draggable="false"
+          />
         </div>
         <DataContext.Provider value={data}>
           <p className={styles.p}>
@@ -176,12 +190,19 @@ function Minimizer() {
               disabled={disabled}
               onClick={() => {
                 setSolution(
-                  getMinMooreMachine(
-                    data.states,
-                    data.initialState,
-                    data.inputAlphabet,
-                    data.machineMatrix
-                  )
+                  data.type === MOORE
+                    ? getMinMooreMachine(
+                        data.states,
+                        data.initialState,
+                        data.inputAlphabet,
+                        data.machineMatrix
+                      )
+                    : getMealyMachine(
+                        data.states,
+                        data.initialState,
+                        data.inputAlphabet,
+                        data.machineMatrix
+                      )
                 );
               }}
             >
