@@ -6,6 +6,7 @@ function MooreSolution({ solution }) {
   const renderParitions = (partitions) => {
     let partitionsStrArr = [];
     for (let i = 0; i < partitions.length; i++) {
+      //if(partitions[i].size>0)
       partitionsStrArr.push("P" + i + " = " + fromSetToString(partitions[i]));
     }
     return partitionsStrArr;

@@ -190,7 +190,7 @@ export function removeInaccessibleStates(machine) {
   for (const [key, val] of machine.states) {
     if (!accessedStates.has(key)) {
       inaccessibleStates += key;
-
+      console.log(key, accessedStates);
       if (counter + 1 < machine.states.size) inaccessibleStates += ",";
       machine.states.delete(key);
     }

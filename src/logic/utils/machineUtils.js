@@ -2,6 +2,8 @@
   @module logicUtils
 */
 
+import { MOORE } from "../../components/Minimizer";
+
 /**
  * Returns an array of options, each with a label and value corresponding to each state in the input array.
  * @param {string[]} states - The array of states to convert to options.
@@ -36,12 +38,18 @@ export function generateEmptyMatrix(iMax, jMax, extraCols) {
  * @param {any[][]} matrix - The matrix to check.
  * @returns {boolean} True if the matrix is completely filled, false otherwise.
  */
-export function isFullFilled(matrix) {
+export function isFullFilled(matrix, type) {
   if (!matrix || !matrix[0]) return false;
 
   for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[0].length; j++) {
-      if (!matrix[i][j]) {
+      if(type===MOORE){
+        if (!matrix[i][j]) {
+          return false;
+        }
+      }else{
+
+        if(!matrix[i][j]||!matrix[i][j].nextState||!matrix[i][j].output)
         return false;
       }
     }
@@ -59,17 +67,25 @@ export function fromSetToString(array) {
 
   let str = "";
   for (let i = 0; i < array.length; i++) {
-    let counter = 0;
-    str += "{";
-    array[i].forEach((e) => {
-      str += e;
-      if (counter + 1 < array[i].size) str += ",";
-      counter++;
-    });
-    str += "}";
-    if (i + 1 < array.length) {
-      str += ",";
+    if(array[i].size>0){
+      let counter = 0;
+      str += "{";
+      array[i].forEach((e) => {
+        str += e;
+        if (counter + 1 < array[i].size) str += ",";
+        counter++;
+      });
+      str += "}";
+      if (i + 1 < array.length) {
+        str += ",";
+      }
     }
+  }
+
+  if(str.charAt(str.length-1)===','){
+
+
+    str = str.slice(0, -1);
   }
   return str;
 }

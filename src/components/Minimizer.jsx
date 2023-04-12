@@ -56,16 +56,19 @@ function Minimizer() {
   };
   const handleChangeStates = (newStates) => {
     setData((prevState) => ({ ...prevState, states: newStates }));
+    resetMatrix();
   };
 
   const handleSetType = (newType) => {
-    resetMatrix();
+
     setDisabled(true)
     setData((prevState) => ({ ...prevState, type: newType }));
+    resetMatrix();
   };
 
   const handleChangeInputAlphabet = (newAlphabet) => {
     setData((prevState) => ({ ...prevState, inputAlphabet: newAlphabet }));
+    resetMatrix();
   };
 
   const handleChangeInitialState = (newInitialState) => {
@@ -86,10 +89,11 @@ function Minimizer() {
 
     newMatrix[i][j] = element;
     setData((prevState) => ({ ...prevState, machineMatrix: newMatrix }));
-    setDisabled(!isFullFilled(data.machineMatrix));
+    setDisabled(!isFullFilled(data.machineMatrix, data.type));
   };
 
   const resetMatrix = () => {
+    setDisabled(true);
     setData((prevState) => ({ ...prevState, machineMatrix: null }));
   };
 
